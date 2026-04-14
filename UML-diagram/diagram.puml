@@ -1,0 +1,73 @@
+@startuml tyreStrategySimDiagram
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+class TrackEnvironment <<Singleton>> {
+  - static TrackEnvironment* instance
+  - float trackTemperature
+  - float timeOfDayHours
+  - bool isNightTime
+  - TrackEnvironment()
+  + static TrackEnvironment& getInstance()
+  + float getTrackTemp()
+  + bool checkIsNight()
+  + void advanceTime(float hours)
+}
+
+abstract class ITyreCompound {
+  # float currentWear
+  # string compoundName
+  + virtual float calculateGrip(float lapsCompleted) = 0
+  + virtual void printStatus() = 0
+  + string getName()
+}
+
+class WetTyre {
+  - float waterDisplacementRate
+  + float calculateGrip(float lapsCompleted) override
+  + void printStatus() override
+}
+
+class SlickTyre {
+  # float optimalTempWindow
+  + float calculateGrip(float lapsCompleted) override
+  + void printStatus() override
+}
+
+class SoftCompound {
+  - float coldGrainFactor
+  + float calculateGrip(float lapsCompleted) override
+}
+
+class HardCompound {
+  - float warmUpTime
+  + float calculateGrip(float lapsCompleted) override
+}
+
+class RaceCar {
+  - string teamName
+  - float fuelTankCapacity
+  - float currentFuel
+  - ITyreCompound* currentTyres
+  - vector<ITyreCompound*> usedTyres
+  + void executePitStop(float fuelAmount)
+  + void executePitStop(float fuelAmount, ITyreCompound* newTyres)
+  + float completeLap()
+}
+
+class EnduranceSimulation {
+  - vector<RaceCar> grid
+  - float totalRaceHours
+  + void start24hRace()
+}
+
+ITyreCompound <|-- WetTyre
+ITyreCompound <|-- SlickTyre
+SlickTyre <|-- SoftCompound
+SlickTyre <|-- HardCompound
+
+RaceCar o-- ITyreCompound : "Polymorfní kompozice"
+EnduranceSimulation *-- RaceCar : "Kompozice (obsahuje grid)"
+TrackEnvironment <-- ITyreCompound : "Závislost (čte teplotu)"
+TrackEnvironment <-- EnduranceSimulation : "Závislost (řídí 24h čas)"
+@enduml
