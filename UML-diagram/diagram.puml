@@ -24,30 +24,31 @@ abstract class ITyreCompound {
 
 class WetTyre {
   - float waterDisplacementRate
-  + float calculateGrip(float lapsCompleted) override
+  + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
 
 class SlickTyre {
   # float optimalTempWindow
-  + float calculateGrip(float lapsCompleted) override
-  + void printStatus() override
 }
 
 class SoftCompound {
-  - float coldGrainFactor
-  + float calculateGrip(float lapsCompleted) override
+  - float blisteringFactor
+  + float calculateGrip(int lapsCompleted) override
+  + void printStatus() override
 }
 
 class HardCompound {
   - float warmUpTime
-  + float calculateGrip(float lapsCompleted) override
+  + float calculateGrip(int lapsCompleted) override
+  + void printStatus() override
 }
 
 class RaceCar {
   - string teamName
   - float fuelTankCapacity
   - float currentFuel
+  - int currentStintLaps
   - ITyreCompound* currentTyres
   - vector<ITyreCompound*> usedTyres
   + void executePitStop(float fuelAmount)
