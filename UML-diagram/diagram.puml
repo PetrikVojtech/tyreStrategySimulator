@@ -57,7 +57,7 @@ class RaceCar {
 }
 
 class EnduranceSimulation {
-  - vector<RaceCar> grid
+  - vector<RaceCar*> grid
   - float totalRaceHours
   + void start24hRace()
 }

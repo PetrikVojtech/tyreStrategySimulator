@@ -1,10 +1,11 @@
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
 int main()
 {
-    cout << "Hello world!" << endl;
+    srand(time(NULL));
 
     return 0;
 }
