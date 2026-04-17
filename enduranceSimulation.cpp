@@ -9,7 +9,7 @@ EnduranceSimulation::EnduranceSimulation()
     fuelTank = rand() % 11 + 85;
     this->grid.push_back(new RaceCar("Ferrari AF Corse #50", fuelTank, new SoftCompound()));
     this->grid.push_back(new RaceCar("Ferrari AF Corse #51", fuelTank, new SoftCompound()));
-    this->grid.push_back(new RaceCar("AF Corse #83", fuelTank, new SoftCompound()));
+    this->grid.push_back(new RaceCar("AF Corse #83", fuelTank, new HardCompound()));
 
     fuelTank = rand() % 11 + 85;
     this->grid.push_back(new RaceCar("Cadillac Hertz Team JOTA #12", fuelTank, new SoftCompound()));
