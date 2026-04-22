@@ -9,7 +9,7 @@ WetTyre::WetTyre()
     this->waterDisplacementRate = 70.0f;
 }
 
-float WetTyre::calculateGrip(int lapsCompleted)
+float WetTyre::calculateGrip(int /* lapsCompleted */)
 {
     // track can only be dry
     float currentTemp = TrackEnvironment::getInstance().getTrackTemp();

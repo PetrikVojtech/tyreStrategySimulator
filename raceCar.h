@@ -15,10 +15,20 @@ private:
     int currentStintLaps; // for one set of tyres
     ITyreCompound *currentTyres;
     std::vector<ITyreCompound *> usedTyres;
+    bool isDNF;
 
 public:
     RaceCar(std::string teamName, float fuelTankCapacity, ITyreCompound *firstSetOfTyres);
     ~RaceCar();
+
+    std::string getTeamName();
+    float getFuelTankCapacity();
+    float getCurrentFuel();
+    int getCurrentStintLaps();
+    ITyreCompound *getCurrentTyres();
+    std::vector<ITyreCompound *> getUsedTyres();
+    bool getIsDNF();
+
     void executePitstop(float fuelAmount);
     void executePitstop(float fuelAmount, ITyreCompound *newTyres);
     float completeLap();
