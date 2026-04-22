@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <cstdlib>
 
@@ -10,6 +12,7 @@ class EnduranceSimulation
 {
 private:
     std::vector<RaceCar *> grid;
+    float currentRaceHours;
     float totalRaceHours;
 
 public:

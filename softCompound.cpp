@@ -7,11 +7,11 @@ SoftCompound::SoftCompound()
     this->optimalTempWindow = 20.0f; // optimal track temp
     this->blisteringFactor = 0.3f;
 }
-float SoftCompound::calculateGrip(int lapsCompleted)
+float SoftCompound::calculateGrip(int /* lapsCompleted */)
 {
     float currentTemp = TrackEnvironment::getInstance().getTrackTemp();
     float tempDiff = currentTemp - this->optimalTempWindow;
-    float wearThisLap = 0.03;
+    float wearThisLap = 0.04;
 
     if (tempDiff > 5.0f)
     {

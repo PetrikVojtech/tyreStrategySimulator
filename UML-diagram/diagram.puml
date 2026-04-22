@@ -7,6 +7,7 @@ class TrackEnvironment <<Singleton>> {
   - float trackTemperature
   - float timeOfDayHours
   - bool isNightTime
+
   - TrackEnvironment()
   + static TrackEnvironment& getInstance()
   + float getTrackTemp()
@@ -17,13 +18,16 @@ class TrackEnvironment <<Singleton>> {
 abstract class ITyreCompound {
   # float currentWear
   # string compoundName
+
   + virtual float calculateGrip(float lapsCompleted) = 0
   + virtual void printStatus() = 0
   + string getName()
+  + float getWear()
 }
 
 class WetTyre {
   - float waterDisplacementRate
+
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
@@ -34,12 +38,14 @@ class SlickTyre {
 
 class SoftCompound {
   - float blisteringFactor
+
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
 
 class HardCompound {
   - float warmUpTime
+
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
@@ -49,16 +55,21 @@ class RaceCar {
   - float fuelTankCapacity
   - float currentFuel
   - int currentStintLaps
+  - bool isDNF
   - ITyreCompound* currentTyres
   - vector<ITyreCompound*> usedTyres
+
   + void executePitStop(float fuelAmount)
   + void executePitStop(float fuelAmount, ITyreCompound* newTyres)
+  + bool getIsDNF()
   + float completeLap()
 }
 
 class EnduranceSimulation {
   - vector<RaceCar*> grid
+  - float currentRaceHours
   - float totalRaceHours
+  
   + void start24hRace()
 }
 

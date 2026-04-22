@@ -8,6 +8,7 @@ RaceCar::RaceCar(std::string teamName, float fuelTankCapacity, ITyreCompound *fi
     this->currentStintLaps = 0;
     this->currentTyres = firstSetOfTyres;
     // usedTyres is automatically initialized as empty by vectors default constructor
+    this->isDNF = false;
 }
 
 RaceCar::~RaceCar()
@@ -18,6 +19,41 @@ RaceCar::~RaceCar()
     {
         delete tyre;
     }
+}
+
+std::string RaceCar::getTeamName()
+{
+    return this->teamName;
+}
+
+float RaceCar::getFuelTankCapacity()
+{
+    return this->fuelTankCapacity;
+}
+
+float RaceCar::getCurrentFuel()
+{
+    return this->currentFuel;
+}
+
+int RaceCar::getCurrentStintLaps()
+{
+    return this->currentStintLaps;
+}
+
+ITyreCompound *RaceCar::getCurrentTyres()
+{
+    return this->currentTyres;
+}
+
+std::vector<ITyreCompound *> RaceCar::getUsedTyres()
+{
+    return this->usedTyres;
+}
+
+bool RaceCar::getIsDNF()
+{
+    return this->isDNF;
 }
 
 void RaceCar::executePitstop(float fuelAmount)
@@ -45,6 +81,18 @@ void RaceCar::executePitstop(float fuelAmount, ITyreCompound *newTyres)
 
 float RaceCar::completeLap()
 {
+    if (this->isDNF)
+        return 0.0f;
+
+    // room for error
+    int rng = rand() % 1000 + 1;
+    if (rng == 1)
+    {
+        this->isDNF = true;
+        std::cout << "CRITICAL FAILURE: " << this->teamName << " has suffered a catastrofic tyre blowout and is OUT of the race!" << std::endl;
+        return 0.0f;
+    }
+
     // simulate Le Mans lap
     float currentGrip = this->currentTyres->calculateGrip(this->currentStintLaps);
 
