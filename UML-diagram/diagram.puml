@@ -3,12 +3,11 @@ skinparam classAttributeIconSize 0
 skinparam monochrome true
 
 class TrackEnvironment <<Singleton>> {
-  - static TrackEnvironment* instance
   - float trackTemperature
   - float timeOfDayHours
   - bool isNightTime
-
   - TrackEnvironment()
+  
   + static TrackEnvironment& getInstance()
   + float getTrackTemp()
   + bool checkIsNight()
@@ -19,6 +18,7 @@ abstract class ITyreCompound {
   # float currentWear
   # string compoundName
 
+  + ~ITyrecompound()
   + virtual float calculateGrip(float lapsCompleted) = 0
   + virtual void printStatus() = 0
   + string getName()
@@ -39,6 +39,7 @@ class SlickTyre {
 class SoftCompound {
   - float blisteringFactor
 
+  + SoftCompound()
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
@@ -46,6 +47,7 @@ class SoftCompound {
 class HardCompound {
   - float warmUpTime
 
+  + HardCompound()
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
@@ -55,10 +57,19 @@ class RaceCar {
   - float fuelTankCapacity
   - float currentFuel
   - int currentStintLaps
-  - bool isDNF
   - ITyreCompound* currentTyres
   - vector<ITyreCompound*> usedTyres
+  - bool isDNF
 
+  + RaceCar()
+  + ~RaceCar()
+  + std::string getTeamName()
+  + float getFuelTankCapacity()
+  + float getCurrentFuel()
+  + int getCurrentStintLaps()
+  + ITyreCompound *getCurrentTyres()
+  + std::vector<ITyreCompound *> getUsedTyres()
+  + bool getIsDNF()
   + void executePitStop(float fuelAmount)
   + void executePitStop(float fuelAmount, ITyreCompound* newTyres)
   + bool getIsDNF()
@@ -70,6 +81,8 @@ class EnduranceSimulation {
   - float currentRaceHours
   - float totalRaceHours
   
+  + EnduranceSimulation()
+  + ~EnduranceSimulation()
   + void start24hRace()
 }
 
