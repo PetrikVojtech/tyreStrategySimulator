@@ -10,6 +10,7 @@ HardCompound::HardCompound()
 
 float HardCompound::calculateGrip(int lapsCompleted)
 {
+    float currentWetness = TrackEnvironment::getInstance().getCurrentWetness();
     float currentTemp = TrackEnvironment::getInstance().getTrackTemp();
     float tempDiff = currentTemp - this->optimalTempWindow;
     float wearThisLap = 0.01f;
@@ -26,6 +27,9 @@ float HardCompound::calculateGrip(int lapsCompleted)
 
     if (requiredWarmUpTime > lapsCompleted)
         currentGrip *= 0.7f;
+
+    if (currentWetness >= 0.30f)
+        currentGrip *= 0.2f;
 
     return currentGrip;
 }

@@ -49,26 +49,54 @@ EnduranceSimulation::~EnduranceSimulation()
 void EnduranceSimulation::start24hRace()
 {
     std::cout << "----- THE 24 HOURS OF LE MANS HAS STARTED -----" << std::endl;
+    float raceDurationSeconds = this->totalRaceHours * 3600.0f;
     this->currentRaceHours = 0.0f;
+
+    bool isAnyoneRacing = true;
 
     int lap = 1;
 
-    while (this->currentRaceHours < this->totalRaceHours)
-    {
-        std::cout << "---------- LAP " << lap << " ----------" << std::endl;
+    std::vector<RaceCar *> standings = this->grid;
 
+    while (isAnyoneRacing && this->currentRaceHours < this->totalRaceHours)
+    {
+        isAnyoneRacing = false;
+        bool headerPrinted = false;
         float bestTime = 9999.0f;
+
+        TrackEnvironment::getInstance().updateWeather();
+        float currentWetness = TrackEnvironment::getInstance().getCurrentWetness();
+        bool isNight = TrackEnvironment::getInstance().checkIsNight();
+        int rainIntensity = TrackEnvironment::getInstance().getRainIntensity();
+        int remainingRainLaps = TrackEnvironment::getInstance().getRemainingRainLaps();
+        // team can never be 100% sure of how many laps will be raining
+        remainingRainLaps += rand() % 5;
+        remainingRainLaps -= rand() % 5;
+
+        float currentTrackTmp = TrackEnvironment::getInstance().getTrackTemp();
 
         for (RaceCar *car : this->grid)
         {
-            if (!car->getIsDNF())
+
+            if (!car->getIsDNF() && car->getTotalRaceTime() < raceDurationSeconds)
             {
                 float time = car->completeLap();
+                isAnyoneRacing = true;
+
+                if (!headerPrinted)
+                {
+                    if (isNight)
+                        std::cout << "---------- LAP " << lap << ": Night | Track Tmp - " << currentTrackTmp << " | Wetness: " << currentWetness << " | Rain Intenstiy: " << rainIntensity << " ----------" << std::endl;
+                    else
+                        std::cout << "---------- LAP " << lap << ":  Day  | Track Tmp - " << currentTrackTmp << " | Wetness: " << currentWetness << " | Rain Intenstiy: " << rainIntensity << " ----------" << std::endl;
+                    headerPrinted = true;
+                }
+
                 if (time < bestTime)
                     bestTime = time;
 
                 // pitstops logic
-                bool isNight = TrackEnvironment::getInstance().checkIsNight();
+
                 float tyreWear = car->getCurrentTyres()->getWear();
                 int currentStintLaps = car->getCurrentStintLaps();
                 float currentFuel = car->getCurrentFuel();
@@ -81,6 +109,10 @@ void EnduranceSimulation::start24hRace()
                     if (currentFuel <= fuelCapacity * 0.15f)
                     {
                         car->executePitstop(75.0f - currentFuel);
+                    }
+                    else if (currentWetness >= 0.3f && remainingRainLaps > 5 && car->getCurrentTyres()->getName() != "Wet")
+                    {
+                        car->executePitstop(75.0f - currentFuel, new WetTyre());
                     }
                 }
                 else
@@ -95,7 +127,24 @@ void EnduranceSimulation::start24hRace()
                     else
                     {
                         // good pitstop
-                        if (currentFuel <= fuelCapacity * 0.15f)
+                        if (currentWetness >= 0.3f && car->getCurrentTyres()->getName() != "Wet")
+                        {
+                            // emergency pitstop - wet
+                            car->executePitstop(fuelCapacity - currentFuel, new WetTyre());
+                        }
+                        else if (currentWetness < 0.3f && car->getCurrentTyres()->getName() == "Wet")
+                        {
+                            // emergency pitstop - slick
+                            if (isNight)
+                            {
+                                car->executePitstop(fuelCapacity - currentFuel, new SoftCompound());
+                            }
+                            else
+                            {
+                                car->executePitstop(fuelCapacity - currentFuel, new HardCompound());
+                            }
+                        }
+                        else if (currentFuel <= fuelCapacity * 0.15f)
                         {
                             // pitstop soft
                             if (car->getCurrentTyres()->getName() == "Soft")
@@ -133,15 +182,47 @@ void EnduranceSimulation::start24hRace()
                                 {
                                     car->executePitstop(fuelCapacity - currentFuel);
                                 }
+                            } // pitstop wet
+                            else if (car->getCurrentTyres()->getName() == "Wet")
+                            {
+                                if (currentStintLaps >= 35 || tyreWear > 0.40f)
+                                {
+                                    car->executePitstop(fuelCapacity - currentFuel, new WetTyre());
+                                }
+                                else
+                                {
+                                    car->executePitstop(fuelCapacity - currentFuel);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
+        std::sort(standings.begin(), standings.end(), [](RaceCar *a, RaceCar *b)
+                  {
+            if (a->getLapsCompleted() != b->getLapsCompleted())
+            {
+                return a->getLapsCompleted() > b->getLapsCompleted(); 
+            }
+            return a->getTotalRaceTime() < b->getTotalRaceTime(); });
+
         this->currentRaceHours += bestTime / 3600.0f;
         TrackEnvironment::getInstance().advanceTime(bestTime / 3600.0f);
+
         lap++;
     }
-    std::cout << "----- THE 24 HOURS OF LE MANS HAS ENDED -----" << std::endl;
+
+    std::cout
+        << "----- THE 24 HOURS OF LE MANS HAS ENDED -----" << std::endl
+        << std::endl;
+
+    std::cout << "--- STANDINGS ---" << std::endl;
+    int i = 1;
+    for (RaceCar *car : standings)
+    {
+        std::cout << i << ". " << car->getTeamName() << " | Laps Completed: " << car->getLapsCompleted() << " | Total Time: " << std::fixed << std::setprecision(3) << car->getTotalRaceTime() << "s" << std::endl;
+        i++;
+    }
 }
