@@ -9,6 +9,7 @@ RaceCar::RaceCar(std::string teamName, float fuelTankCapacity, ITyreCompound *fi
     this->currentTyres = firstSetOfTyres;
     // usedTyres is automatically initialized as empty by vectors default constructor
     this->isDNF = false;
+    this->totalRaceTime = 0.0f;
 }
 
 RaceCar::~RaceCar()
@@ -56,6 +57,16 @@ bool RaceCar::getIsDNF()
     return this->isDNF;
 }
 
+int RaceCar::getLapsCompleted()
+{
+    return this->lapsCompleted;
+}
+
+float RaceCar::getTotalRaceTime()
+{
+    return this->totalRaceTime;
+}
+
 void RaceCar::executePitstop(float fuelAmount)
 {
     this->currentFuel += fuelAmount;
@@ -84,6 +95,7 @@ float RaceCar::completeLap()
     if (this->isDNF)
         return 0.0f;
 
+    this->lapsCompleted++;
     // room for error
     int rng = rand() % 1000 + 1;
     if (rng == 1)
@@ -98,10 +110,19 @@ float RaceCar::completeLap()
 
     float lapTime = 210.0f + ((1.0f - currentGrip) * 20.0f);
 
+    // "human factor"
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> distrib(0.0f, 2.5f);
+
+    lapTime += distrib(gen);
+
     this->currentFuel -= 6.5f;
     if (this->currentFuel < 0.0f)
         lapTime += 999.0f;
     this->currentStintLaps++;
+
+    this->totalRaceTime += lapTime;
 
     // returning lap time
     return lapTime;

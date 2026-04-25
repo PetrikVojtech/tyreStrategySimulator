@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <random>
 
 #include "iTyreCompound.h"
 
@@ -16,6 +17,8 @@ private:
     ITyreCompound *currentTyres;
     std::vector<ITyreCompound *> usedTyres;
     bool isDNF;
+    int lapsCompleted;
+    float totalRaceTime;
 
 public:
     RaceCar(std::string teamName, float fuelTankCapacity, ITyreCompound *firstSetOfTyres);
@@ -28,6 +31,8 @@ public:
     ITyreCompound *getCurrentTyres();
     std::vector<ITyreCompound *> getUsedTyres();
     bool getIsDNF();
+    int getLapsCompleted();
+    float getTotalRaceTime();
 
     void executePitstop(float fuelAmount);
     void executePitstop(float fuelAmount, ITyreCompound *newTyres);

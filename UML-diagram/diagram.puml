@@ -6,11 +6,19 @@ class TrackEnvironment <<Singleton>> {
   - float trackTemperature
   - float timeOfDayHours
   - bool isNightTime
+  - float currentWetness
+  - int rainIntensity
+  - int remainingRainLaps
   - TrackEnvironment()
   
   + static TrackEnvironment& getInstance()
   + float getTrackTemp()
   + bool checkIsNight()
+  + float getCurrentWetness()
+  + int getRainIntensity()
+  + int getRemainingRainLaps()
+  + void setRainLaps(int minRainLaps, int maxRainLaps)
+  + void updateWeather()
   + void advanceTime(float hours)
 }
 
@@ -60,6 +68,8 @@ class RaceCar {
   - ITyreCompound* currentTyres
   - vector<ITyreCompound*> usedTyres
   - bool isDNF
+  - int lapsCompleted
+  - float totalRaceTime
 
   + RaceCar()
   + ~RaceCar()
@@ -70,9 +80,10 @@ class RaceCar {
   + ITyreCompound *getCurrentTyres()
   + std::vector<ITyreCompound *> getUsedTyres()
   + bool getIsDNF()
+  + int getLapsCompleted()
+  + float getTotalRaceTime()
   + void executePitStop(float fuelAmount)
   + void executePitStop(float fuelAmount, ITyreCompound* newTyres)
-  + bool getIsDNF()
   + float completeLap()
 }
 

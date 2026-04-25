@@ -11,13 +11,26 @@ WetTyre::WetTyre()
 
 float WetTyre::calculateGrip(int /* lapsCompleted */)
 {
-    // track can only be dry
+    float currentWetness = TrackEnvironment::getInstance().getCurrentWetness();
+    int rainIntensity = TrackEnvironment::getInstance().getRainIntensity();
     float currentTemp = TrackEnvironment::getInstance().getTrackTemp();
-    float wearThisLap = 0.08f;
+    float wearThisLap = 0.02f;
 
-    if (currentTemp >= 30.0f)
+    if (currentWetness >= 0.0f && currentWetness < 0.1f && rainIntensity == 0)
     {
-        wearThisLap += 0.15f;
+        wearThisLap += 0.11f;
+        if (currentTemp >= 30.0f)
+        {
+            wearThisLap += 0.05f;
+        }
+    }
+    else if (currentWetness >= 0.1f && currentWetness < 0.3f)
+    {
+        wearThisLap += 0.08f;
+        if (currentTemp >= 30.0f)
+        {
+            wearThisLap += 0.02f;
+        }
     }
 
     this->currentWear += wearThisLap;

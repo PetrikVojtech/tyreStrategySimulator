@@ -1,11 +1,17 @@
 #pragma once
 
+#include <cstdlib>
+#include <random>
+
 class TrackEnvironment
 {
 private:
     float trackTemperature;
     float timeOfDayHours;
     bool isNightTime;
+    float currentWetness;
+    int rainIntensity;
+    int remainingRainLaps;
     TrackEnvironment();
 
 public:
@@ -15,5 +21,11 @@ public:
 
     float getTrackTemp();
     bool checkIsNight();
+    float getCurrentWetness();
+    int getRainIntensity();
+    int getRemainingRainLaps();
+
+    void setRainLaps(int minRainLaps, int maxRainLaps);
+    void updateWeather();
     void advanceTime(float hours);
 };

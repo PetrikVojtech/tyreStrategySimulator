@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <cstdlib>
+#include <algorithm> // sort
+#include <iomanip>   // decimal part
 
 #include "raceCar.h"
 #include "softCompound.h"
