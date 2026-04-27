@@ -29,7 +29,7 @@ public:
     float getCurrentFuel();
     int getCurrentStintLaps();
     ITyreCompound *getCurrentTyres();
-    std::vector<ITyreCompound *> getUsedTyres();
+    int getTyreUsageCount(std::string tyreName);
     bool getIsDNF();
     int getLapsCompleted();
     float getTotalRaceTime();

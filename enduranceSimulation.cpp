@@ -225,4 +225,65 @@ void EnduranceSimulation::start24hRace()
         std::cout << i << ". " << car->getTeamName() << " | Laps Completed: " << car->getLapsCompleted() << " | Total Time: " << std::fixed << std::setprecision(3) << car->getTotalRaceTime() << "s" << std::endl;
         i++;
     }
+
+    // export standings into csv file
+    std::cout << std::endl
+              << "Exporting standings into 'leMansStandings.csv'" << std::endl;
+    std::ofstream standingsFile("leMansStandings.csv");
+    standingsFile << "Position,Team,Laps,Total Time\n";
+
+    i = 1;
+    for (RaceCar *car : standings)
+    {
+        standingsFile << i << ","
+                      << car->getTeamName() << ","
+                      << car->getLapsCompleted() << ","
+                      << std::fixed << std::setprecision(3) << car->getTotalRaceTime()
+                      << "\n";
+        i++;
+    }
+    standingsFile.close();
+
+    // export tyre telemetry into csv file
+    std::cout << "Exporting tyre telemetry into 'tyresTelemetry.csv'" << std::endl;
+    std::ofstream tyreTelemetryFile("tyresTelemetry.csv");
+    tyreTelemetryFile << "Team,Tyre Compound,Grip Remaining (%),Status\n";
+    i = 1;
+    for (RaceCar *car : standings)
+    {
+        float gripPercent = car->getCurrentTyres()->getWear() * 100.0f;
+
+        std::string status = car->getIsDNF() ? "DNF" : "Finished";
+
+        tyreTelemetryFile << car->getTeamName() << ","
+                          << car->getCurrentTyres()->getName() << ","
+                          << std::fixed << std::setprecision(1) << gripPercent << "%,"
+                          << status
+                          << "\n";
+        i++;
+    }
+    tyreTelemetryFile.close();
+
+    // export tyre usage into csv file
+    std::cout << "Exporting tyre usage into 'tyreUsage.csv'" << std::endl;
+    std::ofstream tyreUsageFile("tyreUsage.csv");
+    tyreUsageFile << "Team,Soft Tyre,Hard Tyre,Wet Tyre,Total Tyres Used\n";
+    i = 1;
+    for (RaceCar *car : standings)
+    {
+        int softsNum = car->getTyreUsageCount("Soft");
+        int hardsNum = car->getTyreUsageCount("Hard");
+        int wetsNum = car->getTyreUsageCount("Wet");
+
+        int totalUsed = softsNum + hardsNum + wetsNum;
+
+        tyreUsageFile << car->getTeamName() << ","
+                      << softsNum << ","
+                      << hardsNum << ","
+                      << wetsNum << ","
+                      << totalUsed
+                      << "\n";
+        i++;
+    }
+    tyreUsageFile.close();
 }

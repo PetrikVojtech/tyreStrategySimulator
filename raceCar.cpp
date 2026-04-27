@@ -47,9 +47,23 @@ ITyreCompound *RaceCar::getCurrentTyres()
     return this->currentTyres;
 }
 
-std::vector<ITyreCompound *> RaceCar::getUsedTyres()
+int RaceCar::getTyreUsageCount(std::string tyreName)
 {
-    return this->usedTyres;
+    int count = 0;
+
+    if (this->currentTyres != nullptr && this->currentTyres->getName() == tyreName)
+    {
+        count++;
+    }
+    for (ITyreCompound *t : this->usedTyres)
+    {
+        if (t != nullptr && t->getName() == tyreName)
+        {
+            count++;
+        }
+    }
+
+    return count;
 }
 
 bool RaceCar::getIsDNF()
