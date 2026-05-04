@@ -23,19 +23,20 @@ class TrackEnvironment <<Singleton>> {
 }
 
 abstract class ITireCompound {
-  # float currentWear
-  # string compoundName
-
   + ~ITirecompound()
   + virtual float calculateGrip(float lapsCompleted) = 0
   + virtual void printStatus() = 0
-  + string getName()
-  + float getWear()
+  + virtual string getName() = 0
+  + virtual float getWear() = 0
 }
 
 class WetTire {
+  - float currentWear
+  - string compoundName
   - float waterDisplacementRate
 
+  + string getName() override
+  + float getWear() override
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
@@ -45,17 +46,25 @@ class SlickTire {
 }
 
 class SoftCompound {
+  - float currentWear
+  - string compoundName
   - float blisteringFactor
 
   + SoftCompound()
+  + string getName() override
+  + float getWear() override
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
 
 class HardCompound {
+  - float currentWear
+  - string compoundName
   - float warmUpTime
 
   + HardCompound()
+  + string getName() override
+  + float getWear() override
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
