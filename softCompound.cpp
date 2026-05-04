@@ -8,6 +8,16 @@ SoftCompound::SoftCompound()
     this->blisteringFactor = 0.3f;
 }
 
+std::string SoftCompound::getName()
+{
+    return this->compoundName;
+}
+
+float SoftCompound::getWear()
+{
+    return this->currentWear;
+}
+
 float SoftCompound::calculateGrip(int /* lapsCompleted */)
 {
     float currentWetness = TrackEnvironment::getInstance().getCurrentWetness();
@@ -33,5 +43,5 @@ float SoftCompound::calculateGrip(int /* lapsCompleted */)
 
 void SoftCompound::printStatus()
 {
-    std::cout << "Current wear of " << this->compoundName << " tyre is -> " << this->currentWear * 100 << "%" << std::endl;
+    std::cout << "Current wear of " << this->compoundName << " tire is -> " << this->currentWear * 100 << "%" << std::endl;
 }

@@ -9,7 +9,7 @@ SRCS = main.cpp \
        raceCar.cpp \
        softCompound.cpp \
        trackEnvironment.cpp \
-       wetTyre.cpp
+       wetTire.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

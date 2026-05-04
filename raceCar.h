@@ -5,7 +5,7 @@
 #include <iostream>
 #include <random>
 
-#include "iTyreCompound.h"
+#include "iTireCompound.h"
 
 class RaceCar
 {
@@ -13,28 +13,28 @@ private:
     std::string teamName;
     float fuelTankCapacity; // no BoP for now
     float currentFuel;
-    int currentStintLaps; // for one set of tyres
-    ITyreCompound *currentTyres;
-    std::vector<ITyreCompound *> usedTyres;
+    int currentStintLaps; // for one set of tires
+    ITireCompound *currentTires;
+    std::vector<ITireCompound *> usedTires;
     bool isDNF;
     int lapsCompleted;
     float totalRaceTime;
 
 public:
-    RaceCar(std::string teamName, float fuelTankCapacity, ITyreCompound *firstSetOfTyres);
+    RaceCar(std::string teamName, float fuelTankCapacity, ITireCompound *firstSetOfTires);
     ~RaceCar();
 
     std::string getTeamName();
     float getFuelTankCapacity();
     float getCurrentFuel();
     int getCurrentStintLaps();
-    ITyreCompound *getCurrentTyres();
-    int getTyreUsageCount(std::string tyreName);
+    ITireCompound *getCurrentTires();
+    int getTireUsageCount(std::string tireName);
     bool getIsDNF();
     int getLapsCompleted();
     float getTotalRaceTime();
 
     void executePitstop(float fuelAmount);
-    void executePitstop(float fuelAmount, ITyreCompound *newTyres);
+    void executePitstop(float fuelAmount, ITireCompound *newTires);
     float completeLap();
 };

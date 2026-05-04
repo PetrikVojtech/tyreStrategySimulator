@@ -8,6 +8,16 @@ HardCompound::HardCompound()
     this->warmUpTime = 3.0f;
 }
 
+std::string HardCompound::getName()
+{
+    return this->compoundName;
+}
+
+float HardCompound::getWear()
+{
+    return this->currentWear;
+}
+
 float HardCompound::calculateGrip(int lapsCompleted)
 {
     float currentWetness = TrackEnvironment::getInstance().getCurrentWetness();
@@ -36,5 +46,5 @@ float HardCompound::calculateGrip(int lapsCompleted)
 
 void HardCompound::printStatus()
 {
-    std::cout << "Current wear of " << this->compoundName << " tyre is -> " << this->currentWear * 100 << "%" << std::endl;
+    std::cout << "Current wear of " << this->compoundName << " tire is -> " << this->currentWear * 100 << "%" << std::endl;
 }

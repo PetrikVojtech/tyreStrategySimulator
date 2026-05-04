@@ -97,7 +97,7 @@ void EnduranceSimulation::start24hRace()
 
                 // pitstops logic
 
-                float tyreWear = car->getCurrentTyres()->getWear();
+                float tireWear = car->getCurrentTires()->getWear();
                 int currentStintLaps = car->getCurrentStintLaps();
                 float currentFuel = car->getCurrentFuel();
                 float fuelCapacity = car->getFuelTankCapacity();
@@ -110,9 +110,9 @@ void EnduranceSimulation::start24hRace()
                     {
                         car->executePitstop(75.0f - currentFuel);
                     }
-                    else if (currentWetness >= 0.3f && remainingRainLaps > 5 && car->getCurrentTyres()->getName() != "Wet")
+                    else if (currentWetness >= 0.3f && remainingRainLaps > 5 && car->getCurrentTires()->getName() != "Wet")
                     {
-                        car->executePitstop(75.0f - currentFuel, new WetTyre());
+                        car->executePitstop(75.0f - currentFuel, new WetTire());
                     }
                 }
                 else
@@ -122,17 +122,17 @@ void EnduranceSimulation::start24hRace()
                     if (rng == 265)
                     {
                         // error pitstop
-                        car->executePitstop(fuelCapacity - currentFuel, new WetTyre());
+                        car->executePitstop(fuelCapacity - currentFuel, new WetTire());
                     }
                     else
                     {
                         // good pitstop
-                        if (currentWetness >= 0.3f && car->getCurrentTyres()->getName() != "Wet")
+                        if (currentWetness >= 0.3f && car->getCurrentTires()->getName() != "Wet")
                         {
                             // emergency pitstop - wet
-                            car->executePitstop(fuelCapacity - currentFuel, new WetTyre());
+                            car->executePitstop(fuelCapacity - currentFuel, new WetTire());
                         }
-                        else if (currentWetness < 0.3f && car->getCurrentTyres()->getName() == "Wet")
+                        else if (currentWetness < 0.3f && car->getCurrentTires()->getName() == "Wet")
                         {
                             // emergency pitstop - slick
                             if (isNight)
@@ -147,9 +147,9 @@ void EnduranceSimulation::start24hRace()
                         else if (currentFuel <= fuelCapacity * 0.15f)
                         {
                             // pitstop soft
-                            if (car->getCurrentTyres()->getName() == "Soft")
+                            if (car->getCurrentTires()->getName() == "Soft")
                             {
-                                if (currentStintLaps >= 12 || tyreWear > 0.55f)
+                                if (currentStintLaps >= 12 || tireWear > 0.55f)
                                 {
                                     if (isNight)
                                     {
@@ -165,9 +165,9 @@ void EnduranceSimulation::start24hRace()
                                     car->executePitstop(fuelCapacity - currentFuel);
                                 }
                             } // pitstop hard
-                            else if (car->getCurrentTyres()->getName() == "Hard")
+                            else if (car->getCurrentTires()->getName() == "Hard")
                             {
-                                if (currentStintLaps >= 35 || tyreWear > 0.40f)
+                                if (currentStintLaps >= 35 || tireWear > 0.40f)
                                 {
                                     if (isNight)
                                     {
@@ -183,11 +183,11 @@ void EnduranceSimulation::start24hRace()
                                     car->executePitstop(fuelCapacity - currentFuel);
                                 }
                             } // pitstop wet
-                            else if (car->getCurrentTyres()->getName() == "Wet")
+                            else if (car->getCurrentTires()->getName() == "Wet")
                             {
-                                if (currentStintLaps >= 35 || tyreWear > 0.40f)
+                                if (currentStintLaps >= 35 || tireWear > 0.40f)
                                 {
-                                    car->executePitstop(fuelCapacity - currentFuel, new WetTyre());
+                                    car->executePitstop(fuelCapacity - currentFuel, new WetTire());
                                 }
                                 else
                                 {
@@ -244,40 +244,40 @@ void EnduranceSimulation::start24hRace()
     }
     standingsFile.close();
 
-    // export tyre telemetry into csv file
-    std::cout << "Exporting tyre telemetry into 'tyresTelemetry.csv'" << std::endl;
-    std::ofstream tyreTelemetryFile("tyresTelemetry.csv");
-    tyreTelemetryFile << "Team,Tyre Compound,Grip Remaining (%),Status\n";
+    // export tire telemetry into csv file
+    std::cout << "Exporting tire telemetry into 'tiresTelemetry.csv'" << std::endl;
+    std::ofstream tireTelemetryFile("tiresTelemetry.csv");
+    tireTelemetryFile << "Team,Tire Compound,Grip Remaining (%),Status\n";
     i = 1;
     for (RaceCar *car : standings)
     {
-        float gripPercent = car->getCurrentTyres()->getWear() * 100.0f;
+        float gripPercent = car->getCurrentTires()->getWear() * 100.0f;
 
         std::string status = car->getIsDNF() ? "DNF" : "Finished";
 
-        tyreTelemetryFile << car->getTeamName() << ","
-                          << car->getCurrentTyres()->getName() << ","
+        tireTelemetryFile << car->getTeamName() << ","
+                          << car->getCurrentTires()->getName() << ","
                           << std::fixed << std::setprecision(1) << gripPercent << "%,"
                           << status
                           << "\n";
         i++;
     }
-    tyreTelemetryFile.close();
+    tireTelemetryFile.close();
 
-    // export tyre usage into csv file
-    std::cout << "Exporting tyre usage into 'tyreUsage.csv'" << std::endl;
-    std::ofstream tyreUsageFile("tyreUsage.csv");
-    tyreUsageFile << "Team,Soft Tyre,Hard Tyre,Wet Tyre,Total Tyres Used\n";
+    // export tire usage into csv file
+    std::cout << "Exporting tire usage into 'tireUsage.csv'" << std::endl;
+    std::ofstream tireUsageFile("tireUsage.csv");
+    tireUsageFile << "Team,Soft Tire,Hard Tire,Wet Tire,Total Tires Used\n";
     i = 1;
     for (RaceCar *car : standings)
     {
-        int softsNum = car->getTyreUsageCount("Soft");
-        int hardsNum = car->getTyreUsageCount("Hard");
-        int wetsNum = car->getTyreUsageCount("Wet");
+        int softsNum = car->getTireUsageCount("Soft");
+        int hardsNum = car->getTireUsageCount("Hard");
+        int wetsNum = car->getTireUsageCount("Wet");
 
         int totalUsed = softsNum + hardsNum + wetsNum;
 
-        tyreUsageFile << car->getTeamName() << ","
+        tireUsageFile << car->getTeamName() << ","
                       << softsNum << ","
                       << hardsNum << ","
                       << wetsNum << ","
@@ -285,5 +285,5 @@ void EnduranceSimulation::start24hRace()
                       << "\n";
         i++;
     }
-    tyreUsageFile.close();
+    tireUsageFile.close();
 }

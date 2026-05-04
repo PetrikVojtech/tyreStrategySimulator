@@ -1,4 +1,4 @@
-@startuml tyreStrategySimDiagram
+@startuml tireStrategySimDiagram
 skinparam classAttributeIconSize 0
 skinparam monochrome true
 
@@ -22,25 +22,25 @@ class TrackEnvironment <<Singleton>> {
   + void advanceTime(float hours)
 }
 
-abstract class ITyreCompound {
+abstract class ITireCompound {
   # float currentWear
   # string compoundName
 
-  + ~ITyrecompound()
+  + ~ITirecompound()
   + virtual float calculateGrip(float lapsCompleted) = 0
   + virtual void printStatus() = 0
   + string getName()
   + float getWear()
 }
 
-class WetTyre {
+class WetTire {
   - float waterDisplacementRate
 
   + float calculateGrip(int lapsCompleted) override
   + void printStatus() override
 }
 
-class SlickTyre {
+class SlickTire {
   # float optimalTempWindow
 }
 
@@ -65,8 +65,8 @@ class RaceCar {
   - float fuelTankCapacity
   - float currentFuel
   - int currentStintLaps
-  - ITyreCompound* currentTyres
-  - vector<ITyreCompound*> usedTyres
+  - ITireCompound* currentTires
+  - vector<ITireCompound*> usedTires
   - bool isDNF
   - int lapsCompleted
   - float totalRaceTime
@@ -77,13 +77,13 @@ class RaceCar {
   + float getFuelTankCapacity()
   + float getCurrentFuel()
   + int getCurrentStintLaps()
-  + ITyreCompound *getCurrentTyres()
-  + int getTyreUsageCount(std::string tyreName)
+  + ITireCompound *getCurrentTires()
+  + int getTireUsageCount(std::string tireName)
   + bool getIsDNF()
   + int getLapsCompleted()
   + float getTotalRaceTime()
   + void executePitStop(float fuelAmount)
-  + void executePitStop(float fuelAmount, ITyreCompound* newTyres)
+  + void executePitStop(float fuelAmount, ITireCompound* newTires)
   + float completeLap()
 }
 
@@ -97,13 +97,13 @@ class EnduranceSimulation {
   + void start24hRace()
 }
 
-ITyreCompound <|-- WetTyre
-ITyreCompound <|-- SlickTyre
-SlickTyre <|-- SoftCompound
-SlickTyre <|-- HardCompound
+ITireCompound <|-- WetTire
+ITireCompound <|-- SlickTire
+SlickTire <|-- SoftCompound
+SlickTire <|-- HardCompound
 
-RaceCar o-- ITyreCompound : "Polymorfní kompozice"
+RaceCar o-- ITireCompound : "Polymorfní kompozice"
 EnduranceSimulation *-- RaceCar : "Kompozice (obsahuje grid)"
-TrackEnvironment <-- ITyreCompound : "Závislost (čte teplotu)"
+TrackEnvironment <-- ITireCompound : "Závislost (čte teplotu)"
 TrackEnvironment <-- EnduranceSimulation : "Závislost (řídí 24h čas)"
 @enduml

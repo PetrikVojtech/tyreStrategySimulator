@@ -1,24 +1,24 @@
 #include "raceCar.h"
 
-RaceCar::RaceCar(std::string teamName, float fuelTankCapacity, ITyreCompound *firstSetOfTyres)
+RaceCar::RaceCar(std::string teamName, float fuelTankCapacity, ITireCompound *firstSetOfTires)
 {
     this->teamName = teamName;
     this->fuelTankCapacity = fuelTankCapacity;
     this->currentFuel = this->fuelTankCapacity;
     this->currentStintLaps = 0;
-    this->currentTyres = firstSetOfTyres;
-    // usedTyres is automatically initialized as empty by vectors default constructor
+    this->currentTires = firstSetOfTires;
+    // usedTires is automatically initialized as empty by vectors default constructor
     this->isDNF = false;
     this->totalRaceTime = 0.0f;
 }
 
 RaceCar::~RaceCar()
 {
-    delete this->currentTyres;
+    delete this->currentTires;
 
-    for (ITyreCompound *tyre : this->usedTyres) // foreach
+    for (ITireCompound *t : this->usedTires) // foreach
     {
-        delete tyre;
+        delete t;
     }
 }
 
@@ -42,22 +42,22 @@ int RaceCar::getCurrentStintLaps()
     return this->currentStintLaps;
 }
 
-ITyreCompound *RaceCar::getCurrentTyres()
+ITireCompound *RaceCar::getCurrentTires()
 {
-    return this->currentTyres;
+    return this->currentTires;
 }
 
-int RaceCar::getTyreUsageCount(std::string tyreName)
+int RaceCar::getTireUsageCount(std::string tireName)
 {
     int count = 0;
-
-    if (this->currentTyres != nullptr && this->currentTyres->getName() == tyreName)
+    if (this->currentTires != nullptr && this->currentTires->getName() == tireName)
     {
         count++;
     }
-    for (ITyreCompound *t : this->usedTyres)
+
+    for (ITireCompound *t : this->usedTires)
     {
-        if (t != nullptr && t->getName() == tyreName)
+        if (t != nullptr && t->getName() == tireName)
         {
             count++;
         }
@@ -90,18 +90,18 @@ void RaceCar::executePitstop(float fuelAmount)
     std::cout << this->teamName << " pits for fuel only (Double-stint)." << std::endl;
 }
 
-void RaceCar::executePitstop(float fuelAmount, ITyreCompound *newTyres)
+void RaceCar::executePitstop(float fuelAmount, ITireCompound *newTires)
 {
     this->currentFuel += fuelAmount;
     if (this->currentFuel > this->fuelTankCapacity)
         this->currentFuel = this->fuelTankCapacity;
 
-    this->usedTyres.push_back(this->currentTyres);
-    this->currentTyres = newTyres;
+    this->usedTires.push_back(this->currentTires);
+    this->currentTires = newTires;
 
     this->currentStintLaps = 0;
 
-    std::cout << this->teamName << " pits for fuel and fresh " << newTyres->getName() << " tyres." << std::endl;
+    std::cout << this->teamName << " pits for fuel and fresh " << newTires->getName() << " tires." << std::endl;
 }
 
 float RaceCar::completeLap()
@@ -115,12 +115,12 @@ float RaceCar::completeLap()
     if (rng == 1)
     {
         this->isDNF = true;
-        std::cout << "CRITICAL FAILURE: " << this->teamName << " has suffered a catastrofic tyre blowout and is OUT of the race!" << std::endl;
+        std::cout << "CRITICAL FAILURE: " << this->teamName << " has suffered a catastrofic tire blowout and is OUT of the race!" << std::endl;
         return 0.0f;
     }
 
     // simulate Le Mans lap
-    float currentGrip = this->currentTyres->calculateGrip(this->currentStintLaps);
+    float currentGrip = this->currentTires->calculateGrip(this->currentStintLaps);
 
     float lapTime = 210.0f + ((1.0f - currentGrip) * 20.0f);
 

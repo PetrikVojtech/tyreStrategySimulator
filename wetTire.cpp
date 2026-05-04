@@ -1,15 +1,26 @@
-#include "wetTyre.h"
+#include "wetTire.h"
+#include <iostream>
 
 #include "trackEnvironment.h"
 
-WetTyre::WetTyre()
+WetTire::WetTire()
 {
     this->compoundName = "Wet";
     this->currentWear = 0.0f;
     this->waterDisplacementRate = 70.0f;
 }
 
-float WetTyre::calculateGrip(int /* lapsCompleted */)
+std::string WetTire::getName()
+{
+    return this->compoundName;
+}
+
+float WetTire::getWear()
+{
+    return this->currentWear;
+}
+
+float WetTire::calculateGrip(int /* lapsCompleted */)
 {
     float currentWetness = TrackEnvironment::getInstance().getCurrentWetness();
     int rainIntensity = TrackEnvironment::getInstance().getRainIntensity();
@@ -44,7 +55,7 @@ float WetTyre::calculateGrip(int /* lapsCompleted */)
     return currentGrip;
 }
 
-void WetTyre::printStatus()
+void WetTire::printStatus()
 {
-    std::cout << "Current wear of " << this->compoundName << " tyre is -> " << this->currentWear * 100 << "%" << std::endl;
+    std::cout << "Current wear of " << this->compoundName << " tire is -> " << this->currentWear * 100 << "%" << std::endl;
 }

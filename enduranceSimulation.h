@@ -10,7 +10,7 @@
 #include "raceCar.h"
 #include "softCompound.h"
 #include "hardCompound.h"
-#include "wetTyre.h"
+#include "wetTire.h"
 
 class EnduranceSimulation
 {

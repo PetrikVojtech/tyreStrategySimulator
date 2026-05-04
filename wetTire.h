@@ -1,18 +1,16 @@
 #pragma once
 
-#include <iostream>
-#include "slickTire.h"
-#include "trackEnvironment.h"
+#include "iTireCompound.h"
 
-class SoftCompound : public SlickTire
+class WetTire : public ITireCompound
 {
 private:
     std::string compoundName;
     float currentWear;
-    float blisteringFactor;
+    float waterDisplacementRate;
 
 public:
-    SoftCompound();
+    WetTire();
     std::string getName() override;
     virtual float getWear() override;
     float calculateGrip(int lapsCompleted) override;
